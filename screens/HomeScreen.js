@@ -1,15 +1,40 @@
+import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Button, StyleSheet, Text, View } from 'react-native';
+import { fetchUsers } from '../utils/http';
 
 const HomeScreen = ({navigation}) => {
+  const [users, setUsers] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(); 
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const userList = await fetchUsers();
+        setUsers(userList);
+      } catch {
+        setErrorMessage('Could not retreive users at this time, try again later.');
+      }
+    })()
+  }, []);
 
   const onNavigateHandler = () => {
     navigation.navigate("ChatScreen");
   }
 
+  if (errorMessage) {
+    return (
+      <View style={styles.container}>
+        <Text>{errorMessage}</Text>
+      </View>
+    )
+  }
+
   return (
     <View style={styles.container}>
-      <Text>This is the homescreen</Text>
+      {users.map((user) => {
+        return <Text key={user.id}>{user.name}</Text>
+      })}
       <Button title="navigate" onPress={onNavigateHandler}>Navigate to chat screen</Button>
       <StatusBar style="auto" />
     </View>
