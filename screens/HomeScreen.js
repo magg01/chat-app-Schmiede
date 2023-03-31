@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, View, ScrollView } from 'react-native';
 import { fetchUsers } from '../utils/http';
 import ChatUserListItem from '../components/ChatUserListItem';
 
@@ -18,7 +18,7 @@ const HomeScreen = ({navigation}) => {
       }
     })()
   }, []);
-
+  
   const onNavigateHandler = () => {
     navigation.navigate("ChatScreen");
   }
@@ -33,9 +33,11 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      {users.map((user) => {
-        return <ChatUserListItem key={user.id} name={user.name}/>
-      })}
+      <ScrollView>
+        {users.map((user) => {
+          return <ChatUserListItem key={user.id} userName={user.name}/>
+        })}
+      </ScrollView>
       <Button title="navigate" onPress={onNavigateHandler}>Navigate to chat screen</Button>
       <StatusBar style="auto" />
     </View>
