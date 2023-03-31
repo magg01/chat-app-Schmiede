@@ -5,8 +5,6 @@ import { StyleSheet, Text, TextInput, View, Button } from "react-native";
 import { CONST_STRINGS } from "../constants/strings";
 import { useNavigation } from "@react-navigation/native";
 
-const responseMessage = "Thank you for contacting us, we'll reply back soon";
-
 const languageSelectorHandler = () => {
   console.log("selector pressed");
 };
@@ -31,7 +29,7 @@ const ChatScreen = (props) => {
 
   const sendHandler = () => {
     setMessageList((prev) => {
-      return [...prev, inputText, responseMessage ]
+      return [...prev, inputText, CONST_STRINGS.chatScreen.responseMessage['EN'] ]
     });
     setInputText('');
   };
