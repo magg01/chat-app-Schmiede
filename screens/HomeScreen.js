@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { fetchUsers } from '../utils/http';
+import ChatUserListItem from '../components/ChatUserListItem';
 
 const HomeScreen = ({navigation}) => {
   const [users, setUsers] = useState([]);
@@ -33,7 +34,7 @@ const HomeScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       {users.map((user) => {
-        return <Text key={user.id}>{user.name}</Text>
+        return <ChatUserListItem key={user.id} name={user.name}/>
       })}
       <Button title="navigate" onPress={onNavigateHandler}>Navigate to chat screen</Button>
       <StatusBar style="auto" />
