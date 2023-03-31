@@ -1,18 +1,18 @@
 import { Pressable, View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const ChatUserListItem = ({ userName }) => {
+const ChatUserListItem = (props) => {
   const navigation = useNavigation();
-  
+
   const pressHandler = () => {
-    navigation.navigate("ChatScreen");
+    navigation.navigate("ChatScreen", {globalLanguage: props.globalLanguage});
   };
 
   return (
     <View style={styles.container}>
       <Pressable android_ripple={{ color: "#bbb" }} onPress={pressHandler}>
         <View style={styles.innerContainer}>
-          <Text>{userName}</Text>
+          <Text>{props.userName}</Text>
         </View>
       </Pressable>
     </View>

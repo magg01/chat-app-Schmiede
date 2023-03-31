@@ -1,12 +1,25 @@
 import { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Button, StyleSheet, Text, View, ScrollView } from 'react-native';
+import LanguageSelectorButton from '../components/ui/LanguageSelectorButton';
 import { fetchUsers } from '../utils/http';
 import ChatUserListItem from '../components/ChatUserListItem';
 
+const languageSelectorHandler = () => {
+  console.log("selector pressed");
+};
+
 const HomeScreen = ({navigation}) => {
   const [users, setUsers] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(); 
+  const [errorMessage, setErrorMessage] = useState();
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <LanguageSelectorButton onPress={languageSelectorHandler} />
+      ),
+    });
+  }, [navigation]);
 
   useEffect(() => {
     (async () => {
@@ -19,9 +32,6 @@ const HomeScreen = ({navigation}) => {
     })()
   }, []);
   
-  const onNavigateHandler = () => {
-    navigation.navigate("ChatScreen");
-  }
 
   if (errorMessage) {
     return (
@@ -35,10 +45,9 @@ const HomeScreen = ({navigation}) => {
     <View style={styles.container}>
       <ScrollView>
         {users.map((user) => {
-          return <ChatUserListItem key={user.id} userName={user.name}/>
+          return <ChatUserListItem key={user.id} userName={user.name} globalLanguage={'EN'}/>
         })}
       </ScrollView>
-      <Button title="navigate" onPress={onNavigateHandler}>Navigate to chat screen</Button>
       <StatusBar style="auto" />
     </View>
   );

@@ -1,57 +1,99 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
+import { useState, useEffect } from "react";
+import { StatusBar } from "expo-status-bar";
+import LanguageSelectorButton from '../components/ui/LanguageSelectorButton';
+import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { CONST_STRINGS } from "../constants/strings";
+import { useNavigation } from "@react-navigation/native";
 
-const ChatScreen = () => {
+const responseMessage = "Thank you for contacting us, we'll reply back soon";
+
+const languageSelectorHandler = () => {
+  console.log("selector pressed");
+};
+
+const ChatScreen = (props) => {
+  const [messageList, setMessageList] = useState([]);
+  const [inputText, setInputText] = useState("");
+
+  const navigation = useNavigation();
+
+  const changeTextHandler = (text) => {
+    setInputText(text);
+  };
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <LanguageSelectorButton onPress={languageSelectorHandler} />
+      ),
+    });
+  }, [navigation]);
+
+  const sendHandler = () => {
+    setMessageList((prev) => {
+      return [...prev, inputText, responseMessage ]
+    });
+    setInputText('');
+  };
+
   return (
     <View style={styles.container}>
-      <Text>This is the Chat screen</Text>
-      <View style={styles.chatWindow}> 
-
+      <View style={styles.chatWindow}>
+        {messageList.map((message) => {
+          // TODO: use a truly unique key
+          return <Text key={Math.random()}>{message}</Text>
+        })}
       </View>
-      <View style={styles.inputContainer} >
+      <View style={styles.inputContainer}>
         <View style={styles.textInputContainer}>
-          <TextInput placeholder='type to chat'/>
+          <TextInput
+            value={inputText}
+            onChangeText={changeTextHandler}
+            onSubmitEditing={sendHandler}
+            placeholder={CONST_STRINGS.chatScreen.inputText.placeHolder['EN']}
+          />
         </View>
         <View style={styles.buttonContainer}>
-          <Button style={styles.button} title="send" onPress={() => console.log("send")}/>
+          <Button style={styles.button} title={CONST_STRINGS.chatScreen.confirmButton.title['EN']} onPress={sendHandler} />
         </View>
       </View>
       <StatusBar style="auto" />
     </View>
   );
-}
+};
 
 export default ChatScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'flex-start' ,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
   chatWindow: {
     flex: 5,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    justifyContent: "flex-start",
+    alignItems: "center",
     borderWidth: 2,
-    borderColor: 'black',
-    width: '100%',
+    borderColor: "black",
+    width: "100%",
   },
   inputContainer: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'stretch',
-    width: '100%',
+    flexDirection: "row",
+    alignItems: "stretch",
+    width: "100%",
     borderWidth: 2,
-    borderColor: 'red',
+    borderColor: "red",
   },
   buttonContainer: {
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   textInputContainer: {
     borderWidth: 2,
-    borderColor: 'yellow',
+    padding: 4,
+    borderColor: "yellow",
     flex: 4,
-  }
+  },
 });
