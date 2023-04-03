@@ -9,7 +9,7 @@ const languageSelectorHandler = () => {
   console.log("selector pressed");
 };
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({navigation, route}) => {
   const [users, setUsers] = useState([]);
   const [errorMessage, setErrorMessage] = useState();
 
@@ -45,7 +45,7 @@ const HomeScreen = ({navigation}) => {
     <View style={styles.container}>
       <ScrollView>
         {users.map((user) => {
-          return <ChatUserListItem key={user.id} userName={user.name} globalLanguage={'EN'}/>
+          return <ChatUserListItem key={user.id} userName={user.name} globalLanguage={route.params.globalLanguage}/>
         })}
       </ScrollView>
       <StatusBar style="auto" />

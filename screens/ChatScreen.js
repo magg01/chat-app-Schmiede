@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import LanguageSelectorButton from '../components/ui/LanguageSelectorButton';
+import LanguageSelectorButton from "../components/ui/LanguageSelectorButton";
 import { StyleSheet, Text, TextInput, View, Button } from "react-native";
 import { CONST_STRINGS } from "../constants/strings";
 import { useNavigation } from "@react-navigation/native";
@@ -9,7 +9,7 @@ const languageSelectorHandler = () => {
   console.log("selector pressed");
 };
 
-const ChatScreen = (props) => {
+const ChatScreen = ({ route }) => {
   const [messageList, setMessageList] = useState([]);
   const [inputText, setInputText] = useState("");
 
@@ -29,9 +29,13 @@ const ChatScreen = (props) => {
 
   const sendHandler = () => {
     setMessageList((prev) => {
-      return [...prev, inputText, CONST_STRINGS.chatScreen.responseMessage['EN'] ]
+      return [
+        ...prev,
+        inputText,
+        CONST_STRINGS.chatScreen.responseMessage[route.params.globalLanguage],
+      ];
     });
-    setInputText('');
+    setInputText("");
   };
 
   return (
@@ -39,7 +43,7 @@ const ChatScreen = (props) => {
       <View style={styles.chatWindow}>
         {messageList.map((message) => {
           // TODO: use a truly unique key
-          return <Text key={Math.random()}>{message}</Text>
+          return <Text key={Math.random()}>{message}</Text>;
         })}
       </View>
       <View style={styles.inputContainer}>
@@ -48,11 +52,23 @@ const ChatScreen = (props) => {
             value={inputText}
             onChangeText={changeTextHandler}
             onSubmitEditing={sendHandler}
-            placeholder={CONST_STRINGS.chatScreen.inputText.placeHolder['EN']}
+            placeholder={
+              CONST_STRINGS.chatScreen.inputText.placeHolder[
+                route.params.globalLanguage
+              ]
+            }
           />
         </View>
         <View style={styles.buttonContainer}>
-          <Button style={styles.button} title={CONST_STRINGS.chatScreen.confirmButton.title['EN']} onPress={sendHandler} />
+          <Button
+            style={styles.button}
+            title={
+              CONST_STRINGS.chatScreen.confirmButton.title[
+                route.params.globalLanguage
+              ]
+            }
+            onPress={sendHandler}
+          />
         </View>
       </View>
       <StatusBar style="auto" />
